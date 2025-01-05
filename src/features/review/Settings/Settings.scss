@@ -1,0 +1,26 @@
+.settings-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .MuiTextField-root + .MuiTextField-root {
+    margin-top: 0.5rem;
+  }
+
+  & > div,
+  & > hr {
+    width: 100%;
+    display: flex;
+  }
+
+  &__column {
+    flex-direction: column;
+  }
+
+  &__row {
+    flex-direction: row;
+    align-items: center;
+  }
+}

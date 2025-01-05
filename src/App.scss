@@ -1,0 +1,55 @@
+body,
+html,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.main-frame {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__controls,
+  &__review,
+  &__settings {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 25rem;
+    height: 100%;
+  }
+
+  &__controls {
+    .welcome-info {
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    .loader-wrapper {
+      margin-bottom: 0.25rem;
+    }
+  }
+
+  .clamp {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.MuiButtonBase-root,
+.MuiInputBase-root {
+  // use proper theming later on
+  font-weight: bolder !important;
+  color: white !important;
+}
