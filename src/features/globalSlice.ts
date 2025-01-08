@@ -1,14 +1,9 @@
+import { Settings } from '@common-types/common';
 import { defaultSettings } from '@hooks/useSettings';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export type Step = 'home' | 'review' | 'settings';
-
-export type Settings = {
-  waniKaniAccessToken: string;
-  allowManualAnswerReview: boolean;
-  topInferredValuesUsed: number;
-};
 
 interface GlobalState {
   step: Step;

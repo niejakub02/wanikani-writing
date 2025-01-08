@@ -12,7 +12,6 @@ import { CanvasControls } from './CanvasControls';
 import { Button } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import { LoaderWrapper } from '@HOC/LoaderWrapper/LoaderWrapper';
 import { Overlay } from './Overlay';
 
 interface ReviewContext {
@@ -40,11 +39,13 @@ export const Review: FC = () => {
   const { isFetching: isFetchingSubject } = useSubjectQuery(subjectId!, {
     skip: !subjectId,
   });
+  const [key, setKey] = useState(0);
   const assignmentId = reviewSubjects?.data?.[subjectIndex]?.id;
 
   const handleOnPreviousSubject = () => {
     if (subjectIndex > 0) {
       dispatch(previousSubject());
+      setKey((prev) => prev + 1);
       reset();
     }
   };
@@ -52,6 +53,7 @@ export const Review: FC = () => {
   const handleOnNextSubject = () => {
     if (reviewSubjects && subjectIndex < reviewSubjects.data.length - 1) {
       dispatch(nextSubject());
+      setKey((prev) => prev + 1);
       reset();
     }
   };
@@ -74,16 +76,17 @@ export const Review: FC = () => {
       >
         <Overlay />
         <div className="details-container">
-          <LoaderWrapper
-            isLoading={isFetchingReviewSubjects || isFetchingSubject}
+          <div
+            className="details-container__header"
+            data-disabled={
+              isFetchingReviewSubjects || isFetchingSubject ? '' : undefined
+            }
           >
-            <div className="details-container__header">
-              <span className="current-subject-index">{subjectId}</span>
-              <AnswersCounter />
-              <ResourceReferenceButton id={subjectId} />
-            </div>
-          </LoaderWrapper>
-          <SubjectDetails id={subjectId} />
+            <span className="current-subject-index">{subjectId ?? '000'}</span>
+            <AnswersCounter />
+            <ResourceReferenceButton id={subjectId} />
+          </div>
+          <SubjectDetails id={subjectId} key={key} />
         </div>
         <Canvas ref={ref} />
         <CanvasControls />

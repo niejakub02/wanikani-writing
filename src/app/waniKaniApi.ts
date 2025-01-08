@@ -1,13 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Assignment, Subject, WaniKaniResponse } from 'src/types/common';
+import { shuffle } from 'lodash';
 
 export const waniKaniApi = createApi({
   reducerPath: 'waniKaniApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://api.wanikani.com/v2',
-    // headers: {
-    //   Authorization: 'Bearer 45ece105-1189-4389-82d7-d7a8b91b2c6f',
-    // },
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('waniKaniAccessToken');
       if (token) {
@@ -28,6 +26,17 @@ export const waniKaniApi = createApi({
           subject_types: 'kanji', // will be extended to vocab later on
         },
       }),
+      transformResponse: (
+        response: WaniKaniResponse<WaniKaniResponse<Assignment>[]>
+      ) => {
+        const shouldShuffleReview =
+          localStorage.getItem('shouldShuffleReview') === 'true';
+        response.data = shouldShuffleReview
+          ? shuffle(response.data)
+          : response.data;
+        // response.data = response.data.filter((_, i) => i < 3); // remove later on
+        return response;
+      },
     }),
     subject: builder.query<WaniKaniResponse<Subject>, number>({
       query: (id) => ({

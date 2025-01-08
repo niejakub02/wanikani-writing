@@ -1,6 +1,6 @@
 .canvas-container {
-  width: 384px;
-  height: 384px;
+  width: 360px;
+  aspect-ratio: 1/1;
   border: solid 2px var(--ant-color-text-base);
   position: relative;
   opacity: 0.8;
@@ -8,7 +8,7 @@
     linear-gradient(90deg, #bfbfbf 2px, transparent 2px),
     linear-gradient(#bfbfbf 1px, transparent 1px),
     linear-gradient(90deg, #bfbfbf 1px, transparent 1px);
-  background-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px;
+  background-size: 60px 60px, 60px 60px, 15px 15px, 15px 15px;
   background-position: -1px -1px, -1px -2px, -1px -1px, -1px -1px;
   box-sizing: border-box;
   touch-action: none;

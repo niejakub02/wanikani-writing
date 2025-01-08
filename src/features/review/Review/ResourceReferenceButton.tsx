@@ -13,7 +13,7 @@ export const ResourceReferenceButton: FC<ResourceReferenceButtonProps> = ({
   const { data: subject } = useSubjectQuery(id!, {
     skip: !id,
   });
-  const showButton = id && subject;
+  const isButtonDisabled = !!id && !!subject;
 
   const handleOnClick = () => {
     const element = document.createElement('a');
@@ -23,10 +23,12 @@ export const ResourceReferenceButton: FC<ResourceReferenceButtonProps> = ({
   };
 
   return (
-    showButton && (
-      <IconButton onClick={handleOnClick}>
-        <ReplyIcon />
-      </IconButton>
-    )
+    <IconButton
+      onClick={handleOnClick}
+      disabled={isButtonDisabled}
+      className="reference-button"
+    >
+      <ReplyIcon />
+    </IconButton>
   );
 };

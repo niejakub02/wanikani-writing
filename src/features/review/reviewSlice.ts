@@ -7,12 +7,16 @@ interface ReviewState {
   subjectIndex: number;
   providedAnswers: Record<string, boolean>;
   predictions: Prediction[];
+  hideMeanings: boolean;
+  hideReadings: boolean;
 }
 
 const initialState: ReviewState = {
   subjectIndex: 0,
   providedAnswers: {},
   predictions: [],
+  hideMeanings: false,
+  hideReadings: false,
 };
 
 export const reviewSlice = createSlice({
@@ -33,9 +37,16 @@ export const reviewSlice = createSlice({
     },
     clearAnswers(state) {
       state.providedAnswers = {};
+      state.subjectIndex = 0;
     },
     setPredictions(state, action: PayloadAction<Prediction[]>) {
       state.predictions = action.payload;
+    },
+    toggleMeaningsVisibility(state) {
+      state.hideMeanings = !state.hideMeanings;
+    },
+    toggleReadingsVisibility(state) {
+      state.hideReadings = !state.hideReadings;
     },
   },
 });
@@ -46,5 +57,7 @@ export const {
   updateAnswer,
   clearAnswers,
   setPredictions,
+  toggleMeaningsVisibility,
+  toggleReadingsVisibility,
 } = reviewSlice.actions;
 export default reviewSlice;

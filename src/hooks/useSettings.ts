@@ -7,6 +7,9 @@ export const defaultSettings: Settings = {
   waniKaniAccessToken: '',
   allowManualAnswerReview: false,
   topInferredValuesUsed: 1,
+  hideMeaningsByDefault: false,
+  hideReadingsByDefault: false,
+  shouldShuffleReview: false,
 };
 
 export const useSettings = () => {
@@ -15,13 +18,18 @@ export const useSettings = () => {
   useEffect(() => {
     console.warn('Settings initalized!');
     const token = localStorage.getItem('waniKaniAccessToken');
-    const manualResolution = Boolean(
-      localStorage.getItem('allowManualAnswerReview')
-    );
+    const manualResolution =
+      localStorage.getItem('allowManualAnswerReview') === 'true';
     const topInferredValuesUsed = Number(
       localStorage.getItem('topInferredValuesUsed') ??
         defaultSettings.topInferredValuesUsed
     );
+    const hideMeaningsByDefault =
+      localStorage.getItem('hideMeaningsByDefault') === 'true';
+    const hideReadingsByDefault =
+      localStorage.getItem('hideReadingsByDefault') === 'true';
+    const shouldShuffleReview =
+      localStorage.getItem('shouldShuffleReview') === 'true';
 
     dispatch(
       initalizeSettings({
@@ -30,6 +38,12 @@ export const useSettings = () => {
           manualResolution ?? defaultSettings.allowManualAnswerReview,
         topInferredValuesUsed:
           topInferredValuesUsed ?? defaultSettings.topInferredValuesUsed,
+        hideMeaningsByDefault:
+          hideMeaningsByDefault ?? defaultSettings.hideMeaningsByDefault,
+        hideReadingsByDefault:
+          hideReadingsByDefault ?? defaultSettings.hideReadingsByDefault,
+        shouldShuffleReview:
+          shouldShuffleReview ?? defaultSettings.shouldShuffleReview,
       })
     );
   }, [dispatch]);

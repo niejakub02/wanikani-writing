@@ -1,3 +1,5 @@
+@use '/src/index.scss' as *;
+
 .review-container {
   display: flex;
   justify-content: center;
@@ -90,12 +92,24 @@
   align-items: flex-start;
   min-height: 15rem;
   position: relative;
+  padding: 1rem 1rem 0 1rem;
 
   &__header {
     align-self: center;
     justify-content: space-between;
     display: flex;
     width: 100%;
+
+    .reference-button {
+      opacity: 1;
+      transition: 250ms opacity ease-in-out;
+    }
+
+    &[data-disabled] {
+      .reference-button {
+        @include disabled;
+      }
+    }
   }
 }
 
@@ -104,4 +118,10 @@
   font-weight: bolder;
   display: flex;
   align-items: center;
+}
+
+.details {
+  &--hidden {
+    visibility: hidden;
+  }
 }

@@ -1,15 +1,12 @@
 import { useAppDispatch, useAppSelector } from '@app/store';
-import {
-  initalizeSettings,
-  navigate,
-  Settings as SettingsType,
-} from '@features/globalSlice';
+import { initalizeSettings, navigate } from '@features/globalSlice';
 import { Button, Slider, Switch, TextField } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import './Settings.scss';
 import { useReviewSubjectsQuery } from '@app/waniKaniApi';
 import { clearAnswers } from '../reviewSlice';
 import { isEqual } from 'lodash';
+import { Settings as SettingsType } from '@common-types/common';
 
 export const Settings = () => {
   const { settings } = useAppSelector((state) => state.global);
@@ -19,7 +16,14 @@ export const Settings = () => {
 
   const handleOnChange = (e: ChangeEvent | Event) => {
     const target = e.target as HTMLInputElement;
-    if (target.name === 'allowManualAnswerReview') {
+    if (
+      [
+        'allowManualAnswerReview',
+        'hideMeaningsByDefault',
+        'hideReadingsByDefault',
+        'shouldShuffleReview',
+      ].includes(target.name)
+    ) {
       setSettingsDraft((prev) => ({
         ...prev,
         [target.name]: target.checked,
@@ -76,6 +80,30 @@ export const Settings = () => {
         <Switch
           name="allowManualAnswerReview"
           checked={settingsDraft.allowManualAnswerReview}
+          onChange={handleOnChange}
+        />
+      </div>
+      <div className="settings-container__row">
+        <span>Hide meanings by default:</span>
+        <Switch
+          name="hideMeaningsByDefault"
+          checked={settingsDraft.hideMeaningsByDefault}
+          onChange={handleOnChange}
+        />
+      </div>
+      <div className="settings-container__row">
+        <span>Hide readings by default:</span>
+        <Switch
+          name="hideReadingsByDefault"
+          checked={settingsDraft.hideReadingsByDefault}
+          onChange={handleOnChange}
+        />
+      </div>
+      <div className="settings-container__row">
+        <span>Should shuffle review:</span>
+        <Switch
+          name="shouldShuffleReview"
+          checked={settingsDraft.shouldShuffleReview}
           onChange={handleOnChange}
         />
       </div>

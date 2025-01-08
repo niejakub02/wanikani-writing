@@ -96,4 +96,7 @@ export type Settings = {
   waniKaniAccessToken: string;
   allowManualAnswerReview: boolean;
   topInferredValuesUsed: number;
+  hideMeaningsByDefault: boolean;
+  hideReadingsByDefault: boolean;
+  shouldShuffleReview: boolean;
 };

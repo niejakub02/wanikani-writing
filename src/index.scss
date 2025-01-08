@@ -12,3 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@mixin disabled {
+  opacity: 0.6;
+}
