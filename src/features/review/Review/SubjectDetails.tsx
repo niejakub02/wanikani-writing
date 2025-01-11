@@ -2,7 +2,7 @@ import { useAppSelector } from '@app/store';
 import { useSubjectQuery } from '@app/waniKaniApi';
 import { LoaderWrapper } from '@HOC/LoaderWrapper/LoaderWrapper';
 import { IconButton } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
@@ -21,6 +21,11 @@ export const SubjectDetails: FC<SubjectDetailsProps> = ({ id }) => {
   const { data: subject, isFetching } = useSubjectQuery(id!, {
     skip: !id,
   });
+
+  useEffect(() => {
+    setHideMeanings(settings.hideMeaningsByDefault);
+    setHideReadings(settings.hideReadingsByDefault);
+  }, [id, settings.hideMeaningsByDefault, settings.hideReadingsByDefault]);
 
   return (
     <LoaderWrapper isLoading={isFetching || !id}>

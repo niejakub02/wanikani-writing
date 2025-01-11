@@ -39,13 +39,11 @@ export const Review: FC = () => {
   const { isFetching: isFetchingSubject } = useSubjectQuery(subjectId!, {
     skip: !subjectId,
   });
-  const [key, setKey] = useState(0);
   const assignmentId = reviewSubjects?.data?.[subjectIndex]?.id;
 
   const handleOnPreviousSubject = () => {
     if (subjectIndex > 0) {
       dispatch(previousSubject());
-      setKey((prev) => prev + 1);
       reset();
     }
   };
@@ -53,7 +51,6 @@ export const Review: FC = () => {
   const handleOnNextSubject = () => {
     if (reviewSubjects && subjectIndex < reviewSubjects.data.length - 1) {
       dispatch(nextSubject());
-      setKey((prev) => prev + 1);
       reset();
     }
   };
@@ -86,7 +83,7 @@ export const Review: FC = () => {
             <AnswersCounter />
             <ResourceReferenceButton id={subjectId} />
           </div>
-          <SubjectDetails id={subjectId} key={key} />
+          <SubjectDetails id={subjectId} />
         </div>
         <Canvas ref={ref} />
         <CanvasControls />
