@@ -44,13 +44,29 @@ export const CanvasControlProvider: FC<CanvasControlProviderProps> = ({
 
   const reset = () => {
     if (ref.current) {
-      ref.current.innerHTML = '';
+      [
+        ...(ref.current?.querySelectorAll('& > canvas:not([data-delete]') ??
+          []),
+      ].forEach((canvas) => {
+        canvas?.setAttribute('data-delete', '');
+        setTimeout(() => {
+          canvas?.remove();
+        }, 250);
+      });
       setStrokes(0);
     }
   };
 
   const undo = () => {
-    ref.current?.lastChild?.remove();
+    const canvas = [
+      ...(ref.current?.querySelectorAll('& > canvas:not([data-delete]') ?? []),
+    ];
+    const youngestCanvas = canvas.pop();
+    youngestCanvas?.setAttribute('data-delete', '');
+    setTimeout(() => {
+      youngestCanvas?.remove();
+    }, 250);
+    // ref.current?.lastChild?.remove();
     setStrokes((prev) => (prev > 0 ? prev - 1 : 0));
   };
 

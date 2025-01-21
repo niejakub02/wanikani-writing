@@ -62,7 +62,9 @@ export const CanvasControls: FC = () => {
             }
           )
         );
-        reset();
+        setTimeout(() => {
+          reset();
+        }, 1200);
       }
 
       setIsCorrectAnswer(true);
@@ -86,7 +88,7 @@ export const CanvasControls: FC = () => {
     dispatch(setPredictions(predictions));
     setShowOverlay(true);
     if (!settings.allowManualAnswerReview) {
-      setTimeout(() => setShowOverlay(false), 800);
+      setTimeout(() => setShowOverlay(false), 1200);
     }
   };
 

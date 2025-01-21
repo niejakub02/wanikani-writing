@@ -19,7 +19,8 @@ export const Overlay: FC = () => {
   return (
     <div className="overlay">
       <span className="overlay__indicator">
-        {isCorrectAnswer ? '✅ Correct' : '❌ Incorrect'}
+        {isCorrectAnswer ? '' : '❌ Incorrect'}
+        {/* {isCorrectAnswer ? '✅ Correct' : '❌ Incorrect'} */}
       </span>
       {settings.allowManualAnswerReview && (
         <>

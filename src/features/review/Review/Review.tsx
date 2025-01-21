@@ -31,7 +31,8 @@ export const Review: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
   const { ref, reset } = useCanvasControlContext();
-  const { subjectIndex } = useAppSelector((state) => state.review);
+  const { subjectIndex, predictions } = useAppSelector((state) => state.review);
+  const { settings } = useAppSelector((state) => state.global);
   const dispatch = useAppDispatch();
   const { data: reviewSubjects, isFetching: isFetchingReviewSubjects } =
     useReviewSubjectsQuery();
@@ -85,7 +86,14 @@ export const Review: FC = () => {
           </div>
           <SubjectDetails id={subjectId} />
         </div>
-        <Canvas ref={ref} />
+        <div className="canvas-wrapper">
+          {!settings.allowManualAnswerReview && (
+            <div className="canvas-wrapper__overlay">
+              {isCorrectAnswer ? predictions[0]?.literal : ''}
+            </div>
+          )}
+          <Canvas ref={ref} />
+        </div>
         <CanvasControls />
         <div>
           <Button

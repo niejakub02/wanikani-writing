@@ -1,7 +1,6 @@
 import { useAppSelector } from '@app/store';
 import { useSubjectQuery } from '@app/waniKaniApi';
-import { LoaderWrapper } from '@HOC/LoaderWrapper/LoaderWrapper';
-import { IconButton } from '@mui/material';
+import { IconButton, Skeleton } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -28,34 +27,48 @@ export const SubjectDetails: FC<SubjectDetailsProps> = ({ id }) => {
   }, [id, settings.hideMeaningsByDefault, settings.hideReadingsByDefault]);
 
   return (
-    <LoaderWrapper isLoading={isFetching || !id}>
-      <div className="subject-details">
-        <div className="subject-details__meanings">
-          <div className="clamp clamp--tight">
-            <h2>Meanings</h2>
-            <IconButton onClick={() => setHideMeanings((prev) => !prev)}>
-              {hideMeanings ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            </IconButton>
-          </div>
-          <span className={`details ${hideMeanings ? 'details--hidden' : ''}`}>
-            {subject?.data.meanings.map(({ meaning }) => meaning).join(', ')}
-          </span>
+    <div className="subject-details">
+      <div className="subject-details__meanings">
+        <div className="clamp clamp--tight">
+          <h2>Meanings</h2>
+          <IconButton onClick={() => setHideMeanings((prev) => !prev)}>
+            {hideMeanings ? <VisibilityOffIcon /> : <VisibilityIcon />}
+          </IconButton>
         </div>
-        <hr />
-        <div className="subject-details__readings">
-          <div className="clamp clamp--tight">
-            <h2>Readings</h2>
-            <IconButton onClick={() => setHideReadings((prev) => !prev)}>
-              {hideReadings ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            </IconButton>
-          </div>
-          <span className={`details ${hideReadings ? 'details--hidden' : ''}`}>
-            {subject?.data.readings
-              .map(({ reading, type }) => `${reading} (${type})`)
-              .join(', ')}
-          </span>
-        </div>
+        <span
+          className={`details ${
+            hideMeanings && !isFetching ? 'details--hidden' : ''
+          }`}
+        >
+          {isFetching ? (
+            <Skeleton />
+          ) : (
+            subject?.data.meanings.map(({ meaning }) => meaning).join(', ')
+          )}
+        </span>
       </div>
-    </LoaderWrapper>
+      <hr />
+      <div className="subject-details__readings">
+        <div className="clamp clamp--tight">
+          <h2>Readings</h2>
+          <IconButton onClick={() => setHideReadings((prev) => !prev)}>
+            {hideReadings ? <VisibilityOffIcon /> : <VisibilityIcon />}
+          </IconButton>
+        </div>
+        <span
+          className={`details ${
+            hideReadings && !isFetching ? 'details--hidden' : ''
+          }`}
+        >
+          {isFetching ? (
+            <Skeleton />
+          ) : (
+            subject?.data.readings
+              .map(({ reading, type }) => `${reading} (${type})`)
+              .join(', ')
+          )}
+        </span>
+      </div>
+    </div>
   );
 };
