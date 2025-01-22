@@ -142,6 +142,8 @@
   position: relative;
 
   &__overlay {
+    font-family: 'Noto Sans JP', Inter, system-ui, Avenir, Helvetica, Arial,
+      sans-serif !important;
     transition: 400ms opacity ease-in-out, 400ms color ease-in-out,
       300ms filter linear;
     opacity: 0;
