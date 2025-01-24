@@ -39,7 +39,11 @@ const App: FC = () => {
     <div className="main-frame">
       {step === 'home' && (
         <div className="main-frame__controls">
-          <LoaderWrapper isLoading={isFetching} flexyContainer={false}>
+          <LoaderWrapper
+            isLoading={isFetching}
+            flexyContainer={false}
+            type="CircularProgress"
+          >
             {isError ? (
               <span className="welcome-info">
                 It seems something went wrong while fetching WaniKani resources.

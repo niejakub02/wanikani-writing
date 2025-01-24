@@ -1,9 +1,10 @@
 import { useAppSelector } from '@app/store';
 import { useSubjectQuery } from '@app/waniKaniApi';
-import { IconButton, Skeleton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { LoaderWrapper } from '@HOC/LoaderWrapper/LoaderWrapper';
 
 interface SubjectDetailsProps {
   id?: number;
@@ -40,11 +41,9 @@ export const SubjectDetails: FC<SubjectDetailsProps> = ({ id }) => {
             hideMeanings && !isFetching ? 'details--hidden' : ''
           }`}
         >
-          {isFetching ? (
-            <Skeleton />
-          ) : (
-            subject?.data.meanings.map(({ meaning }) => meaning).join(', ')
-          )}
+          <LoaderWrapper type="Skeleton" isLoading={isFetching}>
+            {subject?.data.meanings.map(({ meaning }) => meaning).join(', ')}
+          </LoaderWrapper>
         </span>
       </div>
       <hr />
@@ -60,13 +59,11 @@ export const SubjectDetails: FC<SubjectDetailsProps> = ({ id }) => {
             hideReadings && !isFetching ? 'details--hidden' : ''
           }`}
         >
-          {isFetching ? (
-            <Skeleton />
-          ) : (
-            subject?.data.readings
+          <LoaderWrapper type="Skeleton" isLoading={isFetching}>
+            {subject?.data.readings
               .map(({ reading, type }) => `${reading} (${type})`)
-              .join(', ')
-          )}
+              .join(', ')}
+          </LoaderWrapper>
         </span>
       </div>
     </div>

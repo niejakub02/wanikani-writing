@@ -110,9 +110,16 @@
     display: flex;
     width: 100%;
 
+    .current-subject-index,
+    .reference-button {
+      flex: 1 !important;
+      display: flex;
+    }
+
     .reference-button {
       opacity: 1;
       transition: 250ms opacity ease-in-out;
+      justify-content: flex-end;
     }
 
     &[data-disabled] {

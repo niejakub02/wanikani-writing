@@ -1,10 +1,11 @@
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Skeleton } from '@mui/material';
 import { ComponentProps, FC, ReactNode } from 'react';
 import './LoaderWrapper.scss';
 interface LoaderWrapperProps extends ComponentProps<typeof CircularProgress> {
   isLoading: boolean;
   children: ReactNode;
   flexyContainer?: boolean;
+  type?: 'CircularProgress' | 'Skeleton';
 }
 
 const defaultLoaderSettings: ComponentProps<typeof CircularProgress> = {
@@ -16,6 +17,7 @@ export const LoaderWrapper: FC<LoaderWrapperProps> = ({
   isLoading,
   children,
   flexyContainer = true,
+  type = 'Skeleton',
   ...rest
 }) => {
   return isLoading ? (
@@ -24,7 +26,11 @@ export const LoaderWrapper: FC<LoaderWrapperProps> = ({
         flexyContainer ? 'loader-wrapper--flexy' : ''
       }`}
     >
-      <CircularProgress {...defaultLoaderSettings} {...rest} />
+      {type === 'Skeleton' ? (
+        <Skeleton width="100%" />
+      ) : (
+        <CircularProgress {...defaultLoaderSettings} {...rest} />
+      )}
     </div>
   ) : (
     children
