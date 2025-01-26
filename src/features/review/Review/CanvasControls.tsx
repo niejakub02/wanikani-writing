@@ -14,8 +14,13 @@ import { Button } from '@mui/material';
 import { useReviewContext } from './Review';
 
 export const CanvasControls: FC = () => {
-  const { setIsCorrectAnswer, setShowOverlay, subjectId, assignmentId } =
-    useReviewContext();
+  const {
+    setIsCorrectAnswer,
+    setShowOverlay,
+    subjectId,
+    assignmentId,
+    showOverlay,
+  } = useReviewContext();
   const { getCompoundImage, reset, undo } = useCanvasControlContext();
   const { subjectIndex } = useAppSelector((state) => state.review);
   const { settings } = useAppSelector((state) => state.global);
@@ -41,6 +46,7 @@ export const CanvasControls: FC = () => {
     const predictions = await predict(tensor);
     if (!assignmentId || !predictions || !reviewSubjects?.data) return;
 
+    dispatch(setPredictions(predictions));
     const acceptablePredicitons = predictions
       ?.filter((_, i) => i < settings.topInferredValuesUsed)
       .map((prediciton) => prediciton.literal);
@@ -50,20 +56,25 @@ export const CanvasControls: FC = () => {
       acceptablePredicitons?.includes(subject.data.characters)
     ) {
       if (!settings.allowManualAnswerReview) {
-        dispatch(updateAnswer({ id: assignmentId, isCorrect: true }));
-        dispatch(
-          waniKaniApi.util.updateQueryData(
-            'reviewSubjects',
-            undefined,
-            (response) => {
-              response.data = response.data.filter(
-                (x) => x.id !== assignmentId
-              );
-            }
-          )
-        );
         setTimeout(() => {
+          // cant relay on state
+          // attribute added based on state have to be
+          // checkd manually here
+          if (document.querySelector('[data-pause-auto-actions]')) return;
+          dispatch(updateAnswer({ id: assignmentId, isCorrect: true }));
+          dispatch(
+            waniKaniApi.util.updateQueryData(
+              'reviewSubjects',
+              undefined,
+              (response) => {
+                response.data = response.data.filter(
+                  (x) => x.id !== assignmentId
+                );
+              }
+            )
+          );
           reset();
+          setShowOverlay(false);
         }, 1200);
       }
 
@@ -84,12 +95,11 @@ export const CanvasControls: FC = () => {
     } else {
       dispatch(updateAnswer({ id: assignmentId, isCorrect: false }));
       setIsCorrectAnswer(false);
+      if (!settings.allowManualAnswerReview) {
+        setTimeout(() => setShowOverlay(false), 1200);
+      }
     }
-    dispatch(setPredictions(predictions));
     setShowOverlay(true);
-    if (!settings.allowManualAnswerReview) {
-      setTimeout(() => setShowOverlay(false), 1200);
-    }
   };
 
   return (
@@ -97,7 +107,11 @@ export const CanvasControls: FC = () => {
       <Button variant="text" onClick={reset}>
         Clear
       </Button>
-      <Button variant="contained" onClick={predictFromImage}>
+      <Button
+        variant="contained"
+        onClick={predictFromImage}
+        disabled={showOverlay}
+      >
         Check
       </Button>
       <Button variant="text" onClick={undo}>

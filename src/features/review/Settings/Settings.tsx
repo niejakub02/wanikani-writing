@@ -81,6 +81,7 @@ export const Settings = () => {
           name="allowManualAnswerReview"
           checked={settingsDraft.allowManualAnswerReview}
           onChange={handleOnChange}
+          disabled
         />
       </div>
       <div className="settings-container__row">

@@ -19,7 +19,8 @@ export const useSettings = () => {
     console.warn('Settings initalized!');
     const token = localStorage.getItem('waniKaniAccessToken');
     const manualResolution =
-      localStorage.getItem('allowManualAnswerReview') === 'true';
+      // localStorage.getItem('allowManualAnswerReview') === 'true';
+      false;
     const topInferredValuesUsed = Number(
       localStorage.getItem('topInferredValuesUsed') ??
         defaultSettings.topInferredValuesUsed

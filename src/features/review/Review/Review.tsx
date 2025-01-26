@@ -1,9 +1,13 @@
 import { useAppDispatch, useAppSelector } from '@app/store';
-import { useReviewSubjectsQuery, useSubjectQuery } from '@app/waniKaniApi';
+import {
+  useReviewSubjectsQuery,
+  useSubjectQuery,
+  waniKaniApi,
+} from '@app/waniKaniApi';
 import { Canvas } from '@components/Canvas';
 import useCanvasControlContext from '@context/CanvasContext';
 import { createContext, FC, useContext, useState } from 'react';
-import { nextSubject, previousSubject } from '../reviewSlice';
+import { nextSubject, previousSubject, updateAnswer } from '../reviewSlice';
 import './Review.scss';
 import { SubjectDetails } from './SubjectDetails';
 import { AnswersCounter } from './AnswersCounter';
@@ -13,6 +17,8 @@ import { Button } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { Overlay } from './Overlay';
+import { Progress } from './Progress';
+import { setAttribute } from '@utils/dom';
 
 interface ReviewContext {
   showOverlay: boolean;
@@ -21,6 +27,8 @@ interface ReviewContext {
   setIsCorrectAnswer: (value: boolean) => void;
   subjectId: number | undefined;
   assignmentId: number | undefined;
+  pauseAutoActions: boolean;
+  setPauseAutoActions: (value: boolean) => void;
 }
 
 const reviewContext = createContext<ReviewContext>({} as ReviewContext);
@@ -29,6 +37,7 @@ export const useReviewContext = () => useContext(reviewContext);
 
 export const Review: FC = () => {
   const [showOverlay, setShowOverlay] = useState(false);
+  const [pauseAutoActions, setPauseAutoActions] = useState(false);
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
   const { ref, reset } = useCanvasControlContext();
   const { subjectIndex, predictions } = useAppSelector((state) => state.review);
@@ -65,20 +74,48 @@ export const Review: FC = () => {
         setIsCorrectAnswer,
         assignmentId,
         subjectId,
+        pauseAutoActions,
+        setPauseAutoActions,
       }}
     >
       <div
         className="review-container"
-        data-show-overlay={showOverlay ? '' : undefined}
-        data-is-correct-answer={isCorrectAnswer ? '' : undefined}
+        data-show-overlay={setAttribute(showOverlay)}
+        data-is-correct-answer={setAttribute(isCorrectAnswer)}
+        data-pause-auto-actions={setAttribute(pauseAutoActions)}
+        onMouseDown={() => {
+          if (!showOverlay || !isCorrectAnswer) return;
+          setPauseAutoActions(true);
+        }}
+        onMouseUp={() => {
+          setPauseAutoActions(false);
+          if (!showOverlay || !assignmentId) return;
+          setTimeout(() => {
+            setShowOverlay(false);
+            reset();
+
+            dispatch(updateAnswer({ id: assignmentId, isCorrect: true }));
+            dispatch(
+              waniKaniApi.util.updateQueryData(
+                'reviewSubjects',
+                undefined,
+                (response) => {
+                  response.data = response.data.filter(
+                    (x) => x.id !== assignmentId
+                  );
+                }
+              )
+            );
+          }, 400);
+        }}
       >
         <Overlay />
         <div className="details-container">
           <div
             className="details-container__header"
-            data-disabled={
-              isFetchingReviewSubjects || isFetchingSubject ? '' : undefined
-            }
+            data-disabled={setAttribute(
+              isFetchingReviewSubjects || isFetchingSubject
+            )}
           >
             <span className="current-subject-index">{subjectId ?? '000'}</span>
             <AnswersCounter />
@@ -89,7 +126,20 @@ export const Review: FC = () => {
         <div className="canvas-wrapper">
           {!settings.allowManualAnswerReview && (
             <div className="canvas-wrapper__overlay">
-              {isCorrectAnswer ? predictions[0]?.literal : ''}
+              <span>{isCorrectAnswer ? predictions[0]?.literal : ''}</span>
+              {isCorrectAnswer && (
+                <Progress
+                  startCondition={pauseAutoActions}
+                  resetOnChangeOf={showOverlay}
+                  onFinish={() => {
+                    setShowOverlay(false);
+                    setPauseAutoActions(false);
+                    console.warn(
+                      'user marked this kanji as self written incorrectly'
+                    );
+                  }}
+                />
+              )}
             </div>
           )}
           <Canvas ref={ref} />

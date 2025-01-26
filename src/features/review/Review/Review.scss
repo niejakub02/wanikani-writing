@@ -13,6 +13,7 @@
       pointer-events: all;
       backdrop-filter: blur(0.25rem);
       background-color: rgba(0, 0, 0, 0.05);
+      cursor: grab;
 
       &__indicator {
         opacity: 1;
@@ -22,6 +23,24 @@
     .canvas-wrapper__overlay {
       opacity: 0.85;
       filter: saturate(1) blur(0);
+      color: greenyellow;
+    }
+
+    *:not(.canvas-wrapper__overlay progress) {
+      user-select: none;
+      pointer-events: all;
+    }
+  }
+
+  &[data-pause-auto-actions] {
+    .overlay {
+      cursor: grabbing;
+      background-color: rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(0.33rem);
+    }
+
+    .canvas-wrapper__overlay {
+      cursor: grabbing;
     }
   }
 
@@ -147,25 +166,58 @@
   position: relative;
 
   &__overlay {
-    font-family: 'Noto Sans JP', Inter, system-ui, Avenir, Helvetica, Arial,
-      sans-serif !important;
     transition: 400ms opacity ease-in-out, 400ms color ease-in-out,
       300ms filter linear;
     opacity: 0;
     position: absolute;
     height: 100%;
     width: 100%;
-    content: '';
     display: flex;
     top: 0;
     left: 0;
     justify-content: center;
     align-items: center;
-    font-size: 15rem;
-    color: white;
     z-index: 100;
     pointer-events: none;
-    color: greenyellow;
+    color: white;
     filter: saturate(0) blur(0.5rem);
+    cursor: grab;
+
+    span {
+      font-size: 15rem;
+      text-shadow: 0 0 3rem rgba(0, 0, 0, 0.5), 0 0 1.5rem rgba(0, 0, 0, 0.5);
+    }
+
+    .progress {
+      position: absolute;
+      top: 100%;
+      user-select: none;
+      pointer-events: none;
+
+      &:hover {
+        &::after {
+          background-color: rgb(154, 205, 50, 0.25);
+        }
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        top: 0.25rem;
+        left: 0.25rem;
+        height: calc(100% - 0.5rem);
+        width: calc(100% - 0.5rem);
+        position: absolute;
+        border-radius: 50%;
+        outline: 2px solid yellowgreen;
+        background-color: rgb(154, 205, 50, 0);
+
+        transition: background-color 200ms ease-out;
+      }
+      circle {
+        transition: stroke-dashoffset 1s ease-in-out 0ms !important;
+        stroke: yellowgreen;
+      }
+    }
   }
 }
