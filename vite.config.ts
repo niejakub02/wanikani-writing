@@ -17,6 +17,10 @@ export default defineConfig({
           src: 'node_modules/onnxruntime-web/dist/*.wasm',
           dest: '.',
         },
+        {
+          src: 'public/*',
+          dest: './assets',
+        },
       ],
     }),
   ],
