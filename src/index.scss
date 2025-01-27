@@ -18,8 +18,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@mixin disabled {
-  opacity: 0.6;
+body {
+  &[lite-mode] {
+    * {
+      backdrop-filter: none !important;
+      filter: none !important;
+    }
+  }
 }
 
 * {

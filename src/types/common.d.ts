@@ -99,4 +99,5 @@ export type Settings = {
   hideMeaningsByDefault: boolean;
   hideReadingsByDefault: boolean;
   shouldShuffleReview: boolean;
+  liteMode: boolean;
 };

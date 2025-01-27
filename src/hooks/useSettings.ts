@@ -10,6 +10,7 @@ export const defaultSettings: Settings = {
   hideMeaningsByDefault: false,
   hideReadingsByDefault: false,
   shouldShuffleReview: false,
+  liteMode: false,
 };
 
 export const useSettings = () => {
@@ -31,6 +32,11 @@ export const useSettings = () => {
       localStorage.getItem('hideReadingsByDefault') === 'true';
     const shouldShuffleReview =
       localStorage.getItem('shouldShuffleReview') === 'true';
+    const liteMode = localStorage.getItem('liteMode') === 'true';
+
+    if (liteMode) {
+      document.body.setAttribute('lite-mode', '');
+    }
 
     dispatch(
       initalizeSettings({
@@ -45,6 +51,7 @@ export const useSettings = () => {
           hideReadingsByDefault ?? defaultSettings.hideReadingsByDefault,
         shouldShuffleReview:
           shouldShuffleReview ?? defaultSettings.shouldShuffleReview,
+        liteMode: liteMode ?? defaultSettings.liteMode,
       })
     );
   }, [dispatch]);

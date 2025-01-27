@@ -22,6 +22,7 @@ export const Settings = () => {
         'hideMeaningsByDefault',
         'hideReadingsByDefault',
         'shouldShuffleReview',
+        'liteMode',
       ].includes(target.name)
     ) {
       setSettingsDraft((prev) => ({
@@ -40,6 +41,11 @@ export const Settings = () => {
     Object.entries(settingsDraft).forEach(([name, value]) => {
       localStorage.setItem(name, value.toString());
     });
+    if (settingsDraft.liteMode) {
+      document.body.setAttribute('lite-mode', '');
+    } else {
+      document.body.removeAttribute('lite-mode');
+    }
     dispatch(initalizeSettings(settingsDraft));
     dispatch(navigate('home'));
     dispatch(clearAnswers());
@@ -105,6 +111,14 @@ export const Settings = () => {
         <Switch
           name="shouldShuffleReview"
           checked={settingsDraft.shouldShuffleReview}
+          onChange={handleOnChange}
+        />
+      </div>
+      <div className="settings-container__row">
+        <span>Lite mode:</span>
+        <Switch
+          name="liteMode"
+          checked={settingsDraft.liteMode}
           onChange={handleOnChange}
         />
       </div>
