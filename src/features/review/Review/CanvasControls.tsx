@@ -75,23 +75,22 @@ export const CanvasControls: FC = () => {
           );
           reset();
           setShowOverlay(false);
+
+          if (
+            subjectIndex === reviewSubjects.data.length - 1 &&
+            reviewSubjects.data.length > 0
+          ) {
+            // if last review item, but there are some more
+            dispatch(previousSubject());
+          }
+
+          if (reviewSubjects.data.length - 1 === 0) {
+            // endgame
+            dispatch(navigate('home'));
+          }
         }, 1200);
       }
-
       setIsCorrectAnswer(true);
-
-      if (
-        subjectIndex === reviewSubjects.data.length - 1 &&
-        reviewSubjects.data.length > 0
-      ) {
-        // if last review item, but there are some more
-        dispatch(previousSubject());
-      }
-
-      if (reviewSubjects.data.length - 1 === 0) {
-        // endgame
-        dispatch(navigate('home'));
-      }
     } else {
       dispatch(updateAnswer({ id: assignmentId, isCorrect: false }));
       setIsCorrectAnswer(false);

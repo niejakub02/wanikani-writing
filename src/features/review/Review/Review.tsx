@@ -19,6 +19,7 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import { Overlay } from './Overlay';
 import { Progress } from './Progress';
 import { setAttribute } from '@utils/dom';
+import { navigate } from '@features/globalSlice';
 
 interface ReviewContext {
   showOverlay: boolean;
@@ -106,6 +107,18 @@ export const Review: FC = () => {
                 }
               )
             );
+            if (
+              subjectIndex === reviewSubjects.data.length - 1 &&
+              reviewSubjects.data.length > 0
+            ) {
+              // if last review item, but there are some more
+              dispatch(previousSubject());
+            }
+
+            if (reviewSubjects.data.length - 1 === 0) {
+              // endgame
+              dispatch(navigate('home'));
+            }
           }, 400);
         }}
       >
@@ -119,7 +132,9 @@ export const Review: FC = () => {
           >
             <span className="current-subject-index">{subjectId ?? '000'}</span>
             <AnswersCounter />
-            <ResourceReferenceButton id={subjectId} />
+            <div>
+              <ResourceReferenceButton id={subjectId} />
+            </div>
           </div>
           <SubjectDetails id={subjectId} />
         </div>

@@ -12,7 +12,7 @@
     .overlay {
       pointer-events: all;
       backdrop-filter: blur(0.25rem);
-      background-color: rgba(0, 0, 0, 0.015);
+      background-color: rgba(0, 0, 0, 0.2);
       cursor: grab;
 
       &__indicator {
@@ -34,7 +34,7 @@
   &[data-pause-auto-actions] {
     .overlay {
       cursor: grabbing;
-      background-color: rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(0.33rem);
     }
 
@@ -129,15 +129,18 @@
     width: 100%;
 
     .current-subject-index,
-    .reference-button {
+    div:has(.reference-button) {
       flex: 1 !important;
       display: flex;
+    }
+
+    div:has(.reference-button) {
+      justify-content: flex-end;
     }
 
     .reference-button {
       opacity: 1;
       transition: 250ms opacity ease-in-out;
-      justify-content: flex-end;
     }
 
     &[data-disabled] {
