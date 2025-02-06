@@ -90,7 +90,7 @@ export const Review: FC = () => {
         }}
         onMouseUp={() => {
           setPauseAutoActions(false);
-          if (!showOverlay || !assignmentId) return;
+          if (!showOverlay || !assignmentId || !isCorrectAnswer) return;
           setTimeout(() => {
             setShowOverlay(false);
             reset();
